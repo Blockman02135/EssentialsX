@@ -8,7 +8,7 @@ Bot.remove_command('help')
 
 @Bot.event
 async def on_ready():
-	await Bot.change_presence(activity= discord.Game(name= '&help to open Help menu.'))
+	await Bot.change_presence(activity= discord.Game(name= '&help'))
 #Commands==========
 
 @Bot.command()
