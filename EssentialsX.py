@@ -8,34 +8,45 @@ Bot.remove_command('help')
 
 @Bot.event
 async def on_ready():
-	await Bot.change_presence(activity= discord.Game(name= '&help to open help menu'))
-#Commands==========
+	await Bot.change_presence(activity= discord.Game(name= 'I am Online!'))
+
 
 @Bot.command()
-async def help(ctx, page):
-	if page == '1':
-    embed = discord.Embed( #Показываем что это ембед
-    title = 'Тут ваш заговолок' , #Загаловок
-    description = 'Тут ваше описание' , #Описание
-    colour = discord.Colour.gold #Цвет ебмеда
-    ) #Закрываем ембед
-    #Доп.Части ембеда
-    embed.set_footer(text='Тут ваша строчка ебмеда') #Строчка ембеда
-    embed.set_image(url='https://cdn.discordapp.com/attachments/710848456306065410/710879635168297010/1277_koichi.png') #Сылка на картинку
-    embed.set_thumbnail(url='https://cdn.discordapp.com/attachments/710848456306065410/710879917235241041/3802_corona_stare.png') #Сылка на картинку
-    embed.set_author(name='Тут имя автора') # автор
-    icon_url='https://cdn.discordapp.com/attachments/710848456306065410/710880495143092384/4109_tttgun.png' #Ава автора
-    embed.add_field(name='Заговолок поля', value='Тут то что внутре ебмеда', inline=False) #Добовления поля
-    embed.add_field(name='Заговолок поля', value='Тут то что внутре ебмеда', inline=False) #Добовления поля
-    embed.add_field(name='Заговолок поля', value='Тут то что внутре ебмеда', inline=True) #Добовления поля
+async def serverinfo(ctx):
+    members = ctx.guild.members
+    online = len(list(filter(lambda x: x.status == discord.Status.online, members)))
+    offline = len(list(filter(lambda x: x.status == discord.Status.offline, members)))
+    idle = len(list(filter(lambda x: x.status == discord.Status.idle, members)))
+    dnd = len(list(filter(lambda x: x.status == discord.Status.dnd, members)))
+    allchannels = len(ctx.guild.channels)
+    allvoice = len(ctx.guild.voice_channels)
+    alltext = len(ctx.guild.text_channels)
+    allroles = len(ctx.guild.roles)
+    embed = discord.Embed(title=f"{ctx.guild.name}", color=0xff0000, timestamp=ctx.message.created_at)
+    embed.description=(
+        f":timer: Сервер создали **{ctx.guild.created_at.strftime('%A, %b %#d %Y')}**\n\n"
+        f":flag_white: Регион **{ctx.guild.region}\n\nГлава сервера **{ctx.guild.owner}**\n\n"
+        f":tools: Ботов на сервере: **{len([m for m in members if m.bot])}**\n\n"
+        f":green_circle: Онлайн: **{online}**\n\n"
+        f":black_circle: Оффлайн: **{offline}**\n\n"
+        f":yellow_circle: Отошли: **{idle}**\n\n"
+        f":red_circle: Не трогать: **{dnd}**\n\n"
+        f":shield: Уровень верификации: **{ctx.guild.verification_level}**\n\n"
+        f":musical_keyboard: Всего каналов: **{allchannels}**\n\n"
+        f":loud_sound: Голосовых каналов: **{allvoice}**\n\n"
+        f":keyboard: Текстовых каналов: **{alltext}**\n\n"
+        f":briefcase: Всего ролей: **{allroles}**\n\n"
+        f":slight_smile: Людей на сервере **{ctx.guild.member_count}\n\n"
+    )
 
-    await ctx.send(embed=embed) # Отпрвака ембед
+    embed.set_thumbnail(url=ctx.guild.icon_url)
+    embed.set_footer(text=f"ID: {ctx.guild.id}")
+    embed.set_footer(text=f"ID Пользователя: {ctx.author.id}")
+    await ctx.send(embed=embed)
 
-  if page == '2':
-    await ctx.send('123')
 		
-token = os.environ.get('EX_TOKEN') #переменная токена
+token = os.environ.get('BOT_TOKEN')
 
-Bot.run(str(token)) # строка запуска бота
-
-# Bot.run('token') #для тех кто не на хостинге
+Bot.run(str(token))
+	
+#Bot.run(open('token1.txt', 'r').read()) # Строка запуска бота
